@@ -1156,6 +1156,210 @@ mooi.blog
 `DNS` 中添加 `CNAME` 指向：
 你的用戶名.github.io
 
+## 隱藏特定筆記
+
+### 方法 1：同步時直接排除（推薦）
+
+你目前是用：
+
+```
+robocopy "C:\Users\allen\Obsidian Vault\Allen Vault" "C:\cloud1\project\quartz\content" /MIR
+```
+
+改成：
+
+```
+robocopy ^"C:\Users\allen\Obsidian Vault\Allen Vault" ^"C:\cloud1\project\quartz\content" ^/MIR ^/XD ".obsidian" "模板" "每日筆記"
+```
+
+這樣：
+
+```
+Obsidian├─ 每日筆記├─ 模板└─ 電腦教學
+```
+
+同步到 Quartz 後變成：
+
+```
+content└─ 電腦教學
+```
+
+網站自然就不會出現。
+
+---
+
+### 方法 2：使用 draft（較不推薦）
+
+在資料夾內所有筆記加：
+
+```
+---draft: true---
+```
+
+Quartz 不會發布。
+
+但是：
+
+```
+每日筆記模板
+```
+
+資料夾本身仍可能出現在 Explorer。
+
+---
+
+### 方法 3：Quartz 直接忽略資料夾（推薦）
+
+編輯：
+
+```
+quartz.config.ts
+```
+
+加入：
+
+```
+ignorePatterns: [  "**/.obsidian/**",  "**/模板/**",  "**/每日筆記/**",]
+```
+
+例如：
+
+```
+configuration: {  pageTitle: "Allen 技術筆記",  ignorePatterns: [    "**/.obsidian/**",    "**/模板/**",    "**/每日筆記/**",  ],}
+```
+
+然後：
+
+```
+npx quartz build
+```
+
+或
+
+```
+npx quartz build --serve
+```
+
+---
+
+### 方法 4：只隱藏 Explorer
+
+如果你想：
+
+```
+網址仍可開啟但左側不顯示
+```
+
+修改：
+
+```
+quartz/components/Explorer.tsx
+```
+
+增加過濾：
+
+```
+const hiddenFolders = [  "模板",  "每日筆記",]
+```
+
+不過每次升級 Quartz 都可能被覆蓋。
+
+--- 
+
+### 建議架構
+
+同步命令改成：
+
+### 方法 1：robocopy 排除子資料夾（推薦）
+
+假設 Obsidian Vault 結構：
+
+```
+電腦教學
+├─ 筆記軟件
+│  ├─ Obsidian
+│  └─ Logseq
+├─ 資料庫
+└─ 程式語言
+```
+
+同步時改成：
+
+```
+robocopy ^
+"C:\Users\allen\Obsidian Vault\Allen Vault" ^
+"C:\cloud1\project\quartz\content" ^
+/MIR ^
+/XD ".obsidian" ^ 
+"電腦教學\筆記軟件"
+```
+
+這樣 Quartz 會看到：
+
+```
+電腦教學
+├─ 資料庫
+└─ 程式語言
+```
+
+而不會看到：
+
+```
+電腦教學\筆記軟件
+```
+
+### 方法 2：Quartz ignorePatterns（推薦）
+
+在 `quartz.config.ts` 中：
+
+```yaml
+configuration: {  
+  ignorePatterns: [ 
+    "**/電腦教學/筆記軟件/**",
+  ],
+}
+```
+
+或更寬鬆：
+
+```yaml
+configuration: {  
+  ignorePatterns: [    
+    "**/筆記軟件/**",  
+  ],
+}
+```
+
+之後重新建置：
+
+```bash
+npx quartz build
+```
+
+---
+
+### 方法 3：只隱藏 Explorer 顯示
+
+如果你希望：
+
+```
+網址仍可直接開啟但左側目錄不要顯示
+```
+
+則需要修改 Quartz 的 `Explorer.tsx`，過濾：
+
+```
+const hiddenFolders = [  "筆記軟件"]
+```
+
+但這種方式較麻煩，而且 Quartz 升級後可能失效。
 
 
+```yaml
+robocopy ^
+"C:\Users\allen\Obsidian Vault\Allen Vault" ^
+"C:\cloud1\project\quartz\content" ^
+/MIR ^
+/XD ".obsidian" "模板" "每日筆記" "私人筆記" "Archive"
+```
 

@@ -5,13 +5,13 @@ echo Sync Vault
 echo ====================  
   
 rem robocopy "C:\Users\allen\Obsidian Vault\Allen Vault" "C:\Users\allen\quartz\content" /MIR /XD "C:\Users\allen\Obsidian Vault\Allen Vault\.obsidian"
-robocopy "C:\Users\allen\Obsidian Vault\Allen Vault" "C:\cloude\project\quartz\content" /MIR /XD "C:\Users\allen\Obsidian Vault\Allen Vault\.obsidian"
+robocopy "C:\Users\allen\Obsidian Vault\Allen Vault" "C:\cloud\project\quartz\content" /MIR /XD "C:\Users\allen\Obsidian Vault\Allen Vault\.obsidian"
 
 echo ====================  
 echo Quartz Build  
 echo ====================  
   
-cd /d C:\cloude\project\quartz 
+cd /d C:\cloud\project\quartz 
   
 call npx quartz build
 

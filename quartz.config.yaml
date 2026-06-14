@@ -9,9 +9,12 @@ configuration:
   locale: zh-TW
   baseUrl: obsidian-blog-a9w.pages.dev
   ignorePatterns:
+    - "**/筆記軟件/**"
+    - 每日筆記
     - private
     - templates
     - .obsidian
+    - 模板
   theme:
     fontOrigin: googleFonts
     cdnCaching: true
